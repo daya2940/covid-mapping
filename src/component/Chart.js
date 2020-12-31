@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar} from "react-chartjs-2";
 import axios from "axios";
 
 const Chart = ({ range, startDate, endDate }) => {

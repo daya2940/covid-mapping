@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { DateRange } from "react-date-range";
 import Chart from "../component/Chart";
 
