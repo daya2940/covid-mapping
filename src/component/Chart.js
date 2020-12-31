@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
+import axios from "axios";
+const Chart = ({ range, startDate, endDate }) => {
+  const [value, setValue] = useState({
+    confirmed: [],
+    death: [],
+    recovered: [],
+    data: [],
+  });
 
-const Chart = ({range}) => {
-  
-  const data = {
+  console.log(startDate, endDate);
+
+  const { confirmed, death, recovered, data } = value;
+
+  console.log(data);
+
+  const confirmedCases = () => {};
+  const deathCases = () => {};
+  const recoveredCases = () => {};
+
+  const getData = async () => {
+    await axios
+      .get(
+        `https://api.covid19api.com/country/india?from=${startDate}&to=${endDate}`
+      )
+      .then((res, err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setValue({ data: res.data });
+        }
+      });
+  };
+  console.log(data);
+
+  const chartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
       {
@@ -39,7 +70,7 @@ const Chart = ({range}) => {
   return (
     <div>
       <Bar
-        data={data}
+        data={chartData}
         className="bar"
         width={100}
         height={200}
