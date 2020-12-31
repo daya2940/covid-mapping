@@ -24,7 +24,7 @@ const Calendar = () => {
   console.log(state[0]);
 
   return (
-    <div>
+    <div style={{marginTop:'30px'}}>
       <DateRange
         dateDisplayFormat="dd-mm-yyyy"
         editableDateInputs={true}
