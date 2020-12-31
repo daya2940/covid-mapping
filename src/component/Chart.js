@@ -1,28 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
 const Chart = ({ range, startDate, endDate }) => {
   const [value, setValue] = useState({
-    confirmed: [],
-    death: [],
-    recovered: [],
+    // confirmed: [],
+    // death: [],
+    // recovered: [],
     data: [],
+    // label:[]
   });
+
+  let deathCases,confirmedCases,recoveredCases;
 
   console.log(startDate, endDate);
 
   const { confirmed, death, recovered, data } = value;
 
-  console.log(data);
+ 
+  const Cases = () => {
+    if(data){
+      deathCases = data.reduce((acc,item) => {
+        acc.push(item.Deaths);
+        return [...acc];
+      },[]);
+      confirmedCases = data.reduce((acc,item) => {
+        acc.push(item.Confirmed);
+        return [...acc];
+    },[]);
+    recoveredCases = data.reduce((acc,item) => {
+      acc.push(item.Recovered);
+      return [...acc];
+  },[]);
+  console.log(deathCases ,confirmedCases,recoveredCases );
+  };
+}
 
-  const confirmedCases = () => {};
-  const deathCases = () => {};
-  const recoveredCases = () => {};
+  Cases();
 
-  const getData = async () => {
-    await axios
+
+  useEffect(() => {
+    const getData = async () => {
+      await axios
       .get(
-        `https://api.covid19api.com/country/india?from=${startDate}&to=${endDate}`
+        `https://api.covid19api.com/country/india?from=${startDate}T00:00:00Z&to=${endDate}T00:00:00Z`
       )
       .then((res, err) => {
         if (err) {
@@ -31,8 +51,12 @@ const Chart = ({ range, startDate, endDate }) => {
           setValue({ data: res.data });
         }
       });
-  };
+    }
+    getData();
+  },[endDate,startDate]);
   console.log(data);
+
+
 
   const chartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -44,7 +68,7 @@ const Chart = ({ range, startDate, endDate }) => {
         borderWidth: 1,
         hoverBackgroundColor: "rgba(255,99,132,0.4)",
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: deathCases ,
       },
       {
         label: "Recovered",
@@ -53,7 +77,7 @@ const Chart = ({ range, startDate, endDate }) => {
         borderWidth: 1,
         hoverBackgroundColor: "rgba(255,99,132,0.4)",
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: confirmedCases,
       },
       {
         label: "Confirmed",
@@ -62,7 +86,7 @@ const Chart = ({ range, startDate, endDate }) => {
         borderWidth: 1,
         hoverBackgroundColor: "rgba(255,99,132,0.4)",
         hoverBorderColor: "rgba(255,99,132,1)",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: recoveredCases ,
       },
     ],
   };
